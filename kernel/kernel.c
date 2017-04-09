@@ -7,7 +7,7 @@ void start(){
 	//At the address pointed to by video_memory, store the character 'X' to display it
 	//*video_memory = 'Z';
 
-	print("\nReached D-Land\n\0");
+	print("\nReached C-Land\n\0");
 	for (int i = 0; i < 20; i++){
 		print ("test\n\0");
 	} 
