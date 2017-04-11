@@ -85,6 +85,7 @@ void print_char(char character, int col, int row, char attribute_byte) {
 		offset = get_cursor();
 	}
 	
+	
 	//if we see a newline character, set offset to end of current row, so it will advance to the 
 	//first col of the next row
 	if (character == '\n') {
@@ -92,20 +93,56 @@ void print_char(char character, int col, int row, char attribute_byte) {
 		int current_row = get_row(offset);
 		//calculate new offset
 		offset = get_screen_offset(79, current_row);
-	} else { // otherwise, write the character and its attribute byte to vidmem at the offset
+	} 
+	// handle the bakcspace character
+	else if (character == '\b' && col) {
+		// move the offset back by 2
+		offset = get_screen_offset(col - 1, row);
+	}
+	//handle the tab character
+	else if (character == 0x9) {
+		//increase col to next number divisible by 8
+		int new_col = (col + 0x8) & ~(0x7);
+		offset += new_col * 2;
+		vidmem[offset] = 'x';
+		vidmem[offset + 1] = attribute_byte;
+		offset += 2;
+	}
+	else { // otherwise, write the character and its attribute byte to vidmem at the offset
 		vidmem[offset] = character;
 		vidmem[offset + 1] = attribute_byte;
 	}
 	
 	//update the offset to the next character cell
 	offset += 2;
-	// make scrolling adjustment, for when we reach the end of the screen
-	//scroll();
-	/****** handle this later *****///offset = handle_scrolling(offset);
 	//update the cursor position on the screen
 	set_cursor(offset);
 	scroll();
 	
+}
+
+void print_hex(char hexcode, char attribute_byte){
+	/* Create a byte (char) pointer to the start of video memory */
+	unsigned char *vidmem = (unsigned char *) VIDEO_ADDRESS;
+	
+	if (!attribute_byte){
+		attribute_byte = WHITE_ON_BLACK;
+	}
+	
+	int offset = get_cursor();
+	
+	print("0x\0");
+	
+	
+	vidmem[offset] = hexcode;
+	vidmem[offset + 1] = attribute_byte;
+	
+	
+	//update the offset to the next character cell
+	offset += 2;
+	//update the cursor position on the screen
+	set_cursor(offset);
+	scroll();
 }
 
 void print_at(char* message, int col, int row){
