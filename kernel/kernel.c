@@ -14,9 +14,9 @@ void start(){
 	char temp[] = "test2: x\n\0";
 	//temp[7] = (char) wait_key();
 	print (temp);
-	/* for (int i = 0; i < 20; i++){
+	for (int i = 0; i < 20; i++){
 		print ("test\n\0");
-	} */ 
+	}
 
 
 }

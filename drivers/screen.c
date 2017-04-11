@@ -4,6 +4,29 @@
 
 
 
+ void scroll(){
+	unsigned char *vidmem = (unsigned char *) VIDEO_ADDRESS;
+	unsigned char attribute_byte = WHITE_ON_BLACK;
+	unsigned char blank = 0x20;
+	int pos = get_cursor();
+	if (get_row(pos) >= MAX_ROWS) {
+		//shift every line up one
+		int i;
+		for (i = 0; i < ((MAX_COLS * 2)*(MAX_ROWS-1)); i++){
+			vidmem[i] = vidmem[i + MAX_COLS*2];
+		}
+		
+		//now make the last line blank
+		for (i = (MAX_ROWS - 1)*(MAX_COLS * 2); i < (MAX_ROWS)*(MAX_COLS*2); i+= 2){
+			vidmem[i] = blank;
+			vidmem[i+1] = attribute_byte;
+		}
+		
+		set_cursor(pos - 2*(MAX_COLS)); // Place cursor one line up
+	}
+	
+} 
+
 int get_cursor(){
 	//return the offset from the beginning of video memory based on the current cursor position
 	//the device uses its control register as an index to select its internal registers
@@ -77,9 +100,11 @@ void print_char(char character, int col, int row, char attribute_byte) {
 	//update the offset to the next character cell
 	offset += 2;
 	// make scrolling adjustment, for when we reach the end of the screen
+	//scroll();
 	/****** handle this later *****///offset = handle_scrolling(offset);
 	//update the cursor position on the screen
 	set_cursor(offset);
+	scroll();
 	
 }
 
