@@ -5,9 +5,19 @@
 
 ; This macro creates a stub for an ISR which does NOT pass it's own
 ; error code (adds a dummy errcode byte).
+
+global _isr0
+section .text
+_isr0:
+	cli
+	push byte 0
+	push 0
+	jmp isr_common_stub
+
 %macro ISR_NOERRCODE 1
+  global isr%1
   global _isr%1
-  _isr%1:
+  isr%1:
     cli                         ; Disable interrupts firstly.
     push byte 0                 ; Push a dummy error code.
     push  %1                    ; Push the interrupt number.
@@ -17,8 +27,9 @@
 ; This macro creates a stub for an ISR which passes it's own
 ; error code.
 %macro ISR_ERRCODE 1
+  global isr%1
   global _isr%1
-  _isr%1:
+  isr%1:
     cli                         ; Disable interrupts.
     push %1                     ; Push the interrupt number
     jmp isr_common_stub
@@ -27,8 +38,9 @@
 ; This macro creates a stub for an IRQ - the first parameter is
 ; the IRQ number, the second is the ISR number it is remapped to.
 %macro IRQ 2
+  global irq%1
   global _irq%1
-  _irq%1:
+  irq%1:
     cli
     push byte 0
     push byte %2
