@@ -23,7 +23,7 @@ DISASMS = kernel\kernel.dis
 	
 {$(KERNEL_DIR)}.asm.o:
 	echo making $@
-	nasm $(KERNEL_DIR)\$(*B).asm -f elf -o $@
+	nasm-2.12.02\nasm $(KERNEL_DIR)\$(*B).asm -f elf -o $@
 
 # default make target
 all : os-image $(DISASMS)
@@ -36,7 +36,7 @@ bin\kernel.bin : kernel\kernel.tmp
 	objcopy -O binary "kernel\kernel.tmp" "bin\kernel.bin"
 	
 boot\boot_sect.bin : boot\JLOS.asm
-	nasm "boot\JLOS.asm" -f bin -o "bin\boot_sect.bin"
+	nasm-2.12.02\nasm "boot\JLOS.asm" -f bin -o "bin\boot_sect.bin"
 
 .PHONY : clean
 clean :
