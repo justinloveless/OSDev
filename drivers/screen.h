@@ -10,6 +10,7 @@
 #define REG_SCREEN_CTRL 0x3D4
 #define REG_SCREEN_DATA	0x3D5
 
+void scroll();
 int get_cursor();
 void set_cursor(int offset);
 int get_row(int offset);

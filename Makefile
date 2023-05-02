@@ -2,8 +2,9 @@
 KERNEL_DIR = kernel
 DRIVER_DIR = drivers
 OBJ_DIR = objects
-OBJS = objects\kernel.o objects\kernel_entry.o objects\low_level.o objects\screen.o
+OBJS = objects\kernel.o objects\kernel_entry.o objects\low_level.o objects\screen.o objects\keyboard.o objects\common.o objects\isr.o objects\descriptor_tables.o
 DISASMS = kernel\kernel.dis
+
 
 # {$(SOURCE_DIR)}.SOURCE_EXTENSION{$(OUTPUT_DIR)}.OUTPUT_ENTENSION:
 {$(KERNEL_DIR)}.c.o:
